@@ -1,0 +1,18 @@
+import { StyleSheet } from "react-native";
+
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    justifyContent: "center", 
+    backgroundColor: "#941a1a", 
+    alignItems: "center",
+
+  },
+
+  title: {
+    color: "#fff",
+    fontSize: 32,
+    fontWeight: "bold",
+  }
+})
