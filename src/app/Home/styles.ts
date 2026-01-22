@@ -5,14 +5,13 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1, 
     justifyContent: "center", 
-    backgroundColor: "#941a1a", 
+    backgroundColor: "#ffffff", 
     alignItems: "center",
 
   },
 
-  title: {
-    color: "#fff",
-    fontSize: 32,
-    fontWeight: "bold",
+  logo :{
+    height:34,
+    width:134
   }
 })
