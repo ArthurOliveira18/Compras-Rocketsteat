@@ -1,5 +1,6 @@
-import { View, Text, Image } from "react-native"
+import { View, Image,  } from "react-native"
 import { styles } from "./styles"
+import {Button} from "@/components/Button"
 
 export default function Home() {
 
@@ -11,6 +12,14 @@ export default function Home() {
       style = {styles.logo}
       source={require("@/assets/logo.png")}
       />
+
+
+    {/* Aqui eu não estou chamando o componente "Button" e sim chamando a Função "Button" */}
+      <Button 
+      title = "Entrar" 
+      />
+    
+    
     </View>
 
   )
