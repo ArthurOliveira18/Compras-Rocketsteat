@@ -1,6 +1,7 @@
-import { View, Image,  } from "react-native"
+import { View, Image, } from "react-native"
 import { styles } from "./styles"
-import {Button} from "@/components/Button"
+import { Button } from "@/components/Button"
+import { Input } from "@/components/Input"
 
 export default function Home() {
 
@@ -8,19 +9,23 @@ export default function Home() {
     // No React (JS ou Native) só podemos retornar um único elemento pai, por isso que se colocar mais de uma View ao lado dessa View que tem, vai dar erro!
 
     <View style={styles.container}>
-      <Image 
-      style = {styles.logo}
-      source={require("@/assets/logo.png")}
+      <Image
+        style={styles.logo}
+        source={require("@/assets/logo.png")}
       />
+      <View style={styles.form}>
+        <Input placeholder="O que você precisa comprar?" />
+
+        {/* Aqui eu não estou chamando o componente "Button" e sim chamando a Função "Button" */}
+        <Button title="Entrar"/>
+      </View>
+
+      <View style={styles.content}>
+
+      </View>
 
 
-    {/* Aqui eu não estou chamando o componente "Button" e sim chamando a Função "Button" */}
-      <Button 
-      title = "Entrar" 
-      />
-    
-    
-    </View>
+    </View >
 
   )
 
