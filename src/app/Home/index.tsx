@@ -1,9 +1,12 @@
-import { View, Image, } from "react-native"
+import { View, Image,TouchableOpacity, Text } from "react-native"
 import { styles } from "./styles"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Input"
 import { Filter } from "@/components/Filter"
 import { FilterStatus } from "@/types/filterStatus"
+
+
+const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
 export default function Home() {
 
@@ -19,12 +22,21 @@ export default function Home() {
         <Input placeholder="O que você precisa comprar?" />
 
         {/* Aqui eu não estou chamando o componente "Button" e sim chamando a Função "Button" */}
-        <Button title="Entrar"/>
+        <Button title="Entrar" />
       </View>
 
       <View style={styles.content}>
-        <Filter status={FilterStatus.DONE} isActive={true}/>
-        <Filter status={FilterStatus.PENDING} isActive={false}/>
+        <View style = {styles.header}>
+          {
+            FILTER_STATUS.map((status) => (
+              <Filter key={status} status={status} isActive />
+            ))
+          }
+
+          <TouchableOpacity style = {styles.clearButton}>
+            <Text style = {styles.clearText}>Limpar</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
 
