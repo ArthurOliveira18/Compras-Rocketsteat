@@ -31,7 +31,8 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 24,
     padding:24,
     paddingTop:32,
-    marginTop: 24
+    marginTop: 24,
+    gap:12
   },
   header:{
     width:"100%",
@@ -48,6 +49,5 @@ export const styles = StyleSheet.create({
   clearText:{
     fontSize:12,
     color:"#828282"
-  }
-
+  },
 })
