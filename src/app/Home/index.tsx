@@ -1,54 +1,63 @@
-import { View, Image, TouchableOpacity, Text, ScrollView, FlatList } from "react-native"
+import { View, Image, TouchableOpacity, Text, FlatList, Alert } from "react-native"
 import { styles } from "./styles"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Input"
 import { Filter } from "@/components/Filter"
 import { FilterStatus } from "@/types/filterStatus"
 import { Item } from "@/components/Item"
+import { Import } from "lucide-react-native"
+import { use, useState } from "react"
 
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
-const ITENS = [
-  {
-    id: "1",
-    status: FilterStatus.DONE,
-    description: "1 Pacote de arroz"
-  },
-  {
-    id: "2",
-    status: FilterStatus.PENDING,
-    description: "1 Pote de café"
-  },
-  {
-    id: "3",
-    status: FilterStatus.PENDING,
-    description: "3 cebolas"
-  },
-  
-]
 
 export default function Home() {
 
-  return (
-    // No React (JS ou Native) só podemos retornar um único elemento pai, por isso que se colocar mais de uma View ao lado dessa View que tem, vai dar erro!
+  const [filter, setFilter] = useState(FilterStatus.PENDING)
+  const [description, setDescription] = useState ("")
+  const [items, setItems] = useState<any>([])
 
+  function handleAdd(){
+    if(!description.trim()){
+      return Alert.alert("Adicionar" ,  "Informe uma descrição para adicionar")
+    }
+
+    const newItem = {
+      id: Math.random().toString(36).substring(2),
+      description,
+      filter: FilterStatus.PENDING
+    }
+
+  }
+
+  return (
     <View style={styles.container}>
       <Image
         style={styles.logo}
         source={require("@/assets/logo.png")}
       />
       <View style={styles.form}>
-        <Input placeholder="O que você precisa comprar?" />
-
-        {/* Aqui eu não estou chamando o componente "Button" e sim chamando a Função "Button" */}
-        <Button title="Entrar" />
+        <Input 
+        placeholder="O que você precisa comprar?" 
+        onChangeText={setDescription}
+        />
+       
+        <Button 
+        title="Adicionar" 
+        onPress={handleAdd}
+        />
       </View>
 
       <View style={styles.content}>
         <View style={styles.header}>
           {
             FILTER_STATUS.map((status) => (
-              <Filter key={status} status={status} isActive />
+              <Filter
+                key={status}
+                status={status} 
+                isActive = {status === filter} 
+                onPress={() => setFilter(status)}
+                />
             ))
           }
 
@@ -59,7 +68,7 @@ export default function Home() {
 
 
         <FlatList
-          data={ITENS}
+          data={items}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
             <Item
@@ -68,10 +77,10 @@ export default function Home() {
               onRemove={() => console.log("Remove")}
             />
           )}
-          showsHorizontalScrollIndicator = {false}
-          ItemSeparatorComponent={() => <View style = {styles.separator} />} 
-          contentContainerStyle= { styles.listContent}
-          ListEmptyComponent={() => <Text style = {styles.empty}>Nenhum item aqui.</Text>}
+          showsHorizontalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+          contentContainerStyle={styles.listContent}
+          ListEmptyComponent={() => <Text style={styles.empty}>Nenhum item aqui.</Text>}
         />
 
 
