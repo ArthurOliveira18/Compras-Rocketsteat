@@ -25,7 +25,7 @@ async function get(): Promise<ItemStorage[]> {
 async function getByStatus(status : FilterStatus): Promise<ItemStorage[]> {
     const items =  await get()
 
-    return items.filter((items) => items.status)
+    return items.filter((items) => items.status ===  status)
 }
 
 async function save(items:ItemStorage []): Promise<void>{
@@ -45,10 +45,17 @@ async function add(newItem:ItemStorage): Promise<ItemStorage[]> {
     return(updateItems)
 }
 
+async function remove(id:string): Promise <void> {
+    const items = await get()
+    const updateItems = items.filter((item) => item.id !== id)
+    await save(updateItems)
+}
+
 export const itemsStorage = {
     get,
     getByStatus,
     add,
+    remove,
 
 }
 

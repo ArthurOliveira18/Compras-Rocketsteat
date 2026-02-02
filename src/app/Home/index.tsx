@@ -1,4 +1,4 @@
-import { View, Image, TouchableOpacity, Text, FlatList, Alert } from "react-native"
+import { View, Image, TouchableOpacity, Text, FlatList, Alert, Keyboard } from "react-native"
 import { Import } from "lucide-react-native"
 import { use, useState, useEffect } from "react"
 
@@ -30,11 +30,16 @@ export default function Home() {
       id: Math.random().toString(36).substring(2),
       description,
       status: FilterStatus.PENDING,
-      
+
     }
 
-   await itemsStorage.add(newItem)
-   await itemsByStatus()
+    await itemsStorage.add(newItem)
+    await itemsByStatus()
+
+
+    Alert.alert("Adicionado", `Adicionado ${description}`)
+    setFilter(FilterStatus.PENDING)
+    setDescription('')
 
 
   }
@@ -42,7 +47,7 @@ export default function Home() {
   async function itemsByStatus() {
 
     try {
-      const response = await itemsStorage.get()
+      const response = await itemsStorage.getByStatus(filter)
       setItems(response)
     }
 
@@ -53,9 +58,35 @@ export default function Home() {
 
   }
 
+  function handleRemove(id: string) {
+    Alert.alert(
+      "Remover", 
+      "Deseja realmente excluir este item?",
+      [
+        {
+          text: "Não",
+          style: "cancel"
+        },
+        {
+          text: "Sim",
+          onPress: async () => {
+            try {
+              await itemsStorage.remove(id)
+              await itemsByStatus() // Atualiza a lista na tela
+            } catch (error) {
+              console.log(error)
+              Alert.alert("Erro", "Não foi possível remover o item.")
+            }
+          }
+        },
+        
+      ]
+    )
+  }
+
   useEffect(() => {
     itemsByStatus()
-  }, [])
+  }, [filter])
 
   return (
     <View style={styles.container}>
@@ -67,6 +98,7 @@ export default function Home() {
         <Input
           placeholder="O que você precisa comprar?"
           onChangeText={setDescription}
+          value={description}
         />
 
         <Button
@@ -101,7 +133,7 @@ export default function Home() {
             <Item
               data={item}
               onStatus={() => console.log("Muda o status")}
-              onRemove={() => console.log("Remove")}
+              onRemove={() => handleRemove(item.id)}
             />
           )}
           showsHorizontalScrollIndicator={false}
