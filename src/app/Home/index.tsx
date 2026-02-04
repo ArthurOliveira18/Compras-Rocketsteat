@@ -37,7 +37,7 @@ export default function Home() {
     await itemsByStatus()
 
 
-    Alert.alert("Adicionado", `Adicionado ${description}`)
+    Alert.alert("Adicionado", `Adicionado o item: ${description}`)
     setFilter(FilterStatus.PENDING)
     setDescription('')
 
@@ -84,6 +84,33 @@ export default function Home() {
     )
   }
 
+  function handleClear(){
+    Alert.alert("Limpar" , "Deseja remover todos os itens?", [ 
+      {text: "Não" , style:"cancel"},
+      {text:"Sim" , onPress: () => onClear()}
+    ])
+  }
+
+  async function onClear():Promise<void> {
+    try {
+      await itemsStorage.clear()
+      setItems([])
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Erro" , "Não foi possível remover todos os itens")
+    }
+  }
+
+  async function handdleToggleStatus(id: string) {
+    try {
+      await itemsStorage.toggleStatus(id)
+      await itemsByStatus()
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Erro" , "Não foi possível atualizar o status.")
+    }
+  }
+
   useEffect(() => {
     itemsByStatus()
   }, [filter])
@@ -120,7 +147,7 @@ export default function Home() {
             ))
           }
 
-          <TouchableOpacity style={styles.clearButton}>
+          <TouchableOpacity style={styles.clearButton} onPress={handleClear}>
             <Text style={styles.clearText}>Limpar</Text>
           </TouchableOpacity>
         </View>
@@ -132,7 +159,7 @@ export default function Home() {
           renderItem={({ item }) => (
             <Item
               data={item}
-              onStatus={() => console.log("Muda o status")}
+              onStatus={() => handdleToggleStatus(item.id)}
               onRemove={() => handleRemove(item.id)}
             />
           )}
